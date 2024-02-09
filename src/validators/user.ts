@@ -49,8 +49,10 @@ export const userCreateValidator = catchAsync(async (req, res, next) => {
     try {
         await userCreateSchema.validateAsync(req.body);
 
-        if (await User.findOne({ email: req.body.email })) throw new AppError('Email already in use', 400);
-        if (await User.findOne({ username: req.body.username })) throw new AppError('Username already in use', 400);
+        if (await User.findOne({ email: req.body.email }))
+            throw new AppError('Email already in use', 400);
+        if (await User.findOne({ username: req.body.username }))
+            throw new AppError('Username already in use', 400);
 
         next();
     } catch (error) {

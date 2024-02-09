@@ -41,9 +41,12 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
     const user = await User.findOne({ _id: req.body.userID });
     if (!user) return next(new AppError('Invalid URL', 401));
 
-    if (!user.passwordResetToken || user.resetTokenExpired()) return next(new AppError('URL has Expired', 401));
-    if (!user.correctPasswordResetToken(req.body.token)) return next(new AppError('Invalid URL', 401));
-    if (req.body.password !== req.body.confirmPassword) return next(new AppError('Passwords do not match', 400));
+    if (!user.passwordResetToken || user.resetTokenExpired())
+        return next(new AppError('URL has Expired', 401));
+    if (!user.correctPasswordResetToken(req.body.token))
+        return next(new AppError('Invalid URL', 401));
+    if (req.body.password !== req.body.confirmPassword)
+        return next(new AppError('Passwords do not match', 400));
 
     user.password = req.body.password;
     user.passwordResetToken = undefined;

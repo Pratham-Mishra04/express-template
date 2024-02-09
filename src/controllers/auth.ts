@@ -8,17 +8,25 @@ import catchAsync from '../helpers/catch_async';
 import User, { UserDocument } from '../models/user';
 
 export const createSendToken = (user: UserDocument, statusCode: number, res: Response) => {
-    const access_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: JWT.ACCESS_TOKEN_TTL,
-    });
+    const access_token = jwt.sign(
+        { sub: user._id, crt: new Date(), exp: new Date(Date.now() + JWT.ACCESS_TOKEN_TTL) },
+        ENV.JWT_KEY,
+        {
+            expiresIn: JWT.ACCESS_TOKEN_TTL,
+        }
+    );
 
-    const refresh_token = jwt.sign({ id: user._id }, ENV.JWT_KEY, {
-        expiresIn: JWT.REFRESH_TOKEN_TTL,
-    });
+    const refresh_token = jwt.sign(
+        { sub: user._id, crt: new Date(), exp: new Date(Date.now() + JWT.REFRESH_TOKEN_TTL) },
+        ENV.JWT_KEY,
+        {
+            expiresIn: JWT.REFRESH_TOKEN_TTL,
+        }
+    );
     user.password = undefined;
 
     const cookieSettings = {
-        expires: new Date(Date.now() + JWT.REFRESH_TOKEN_TTL_IN_MICROSECONDS),
+        expires: new Date(Date.now() + JWT.REFRESH_TOKEN_TTL * 1000),
         httpOnly: true,
         secure: false,
     };
@@ -66,7 +74,7 @@ export const refresh = catchAsync(async (req: Request, res: Response) => {
     const accessToken = jwt.verify(accessTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
 
     if (!accessToken || !accessToken.sub) {
-        throw new Error('Invalid access token');
+        return res.status(401).json({ status: 'error', message: 'Invalid access token' });
     }
 
     const userId = accessToken.sub;
@@ -83,7 +91,7 @@ export const refresh = catchAsync(async (req: Request, res: Response) => {
 
     const refreshToken = jwt.verify(refreshTokenString, ENV.JWT_KEY) as jwt.JwtPayload;
     if (!refreshToken) {
-        throw new Error('Invalid refresh token');
+        return res.status(401).json({ status: 'error', message: 'Invalid refresh token' });
     }
 
     if (refreshToken.sub !== userId) {

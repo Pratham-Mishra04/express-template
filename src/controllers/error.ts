@@ -57,7 +57,8 @@ const ErrorController = (error: Error, req: Request, res: Response) => {
         let error = { ...err };
         if (err?.name === 'CastError') error = CastErrorHandler(error);
         if (err?.code === 11000) error = DuplicateErrorHandler(error);
-        if (err?._message) if (err._message.match(/validation failed/)) error = ValidationErrorHandler(error);
+        if (err?._message)
+            if (err._message.match(/validation failed/)) error = ValidationErrorHandler(error);
         if (err?.name === 'JsonWebTokenError') error = JWTErrorHandler(error, 'invalid');
         if (err?.name === 'TokenExpiredError') error = JWTErrorHandler(error, 'expired');
         if (err?.isJoi) error = JoiErrorHandler(error);

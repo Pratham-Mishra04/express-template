@@ -1,4 +1,11 @@
-import { RedisClientOptions, RedisClientType, RedisFunctions, RedisModules, RedisScripts, createClient } from 'redis';
+import {
+    RedisClientOptions,
+    RedisClientType,
+    RedisFunctions,
+    RedisModules,
+    RedisScripts,
+    createClient,
+} from 'redis';
 import logger from '../utils/logger';
 import { ENV } from './env';
 

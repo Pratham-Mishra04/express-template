@@ -26,11 +26,14 @@ export const protect = catchAsync(async (req: Request, res: Response, next: Next
 
     const decoded: jwt.JwtPayload = await jwtVerifyPromisified(token, ENV.JWT_KEY);
 
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.sub);
 
     if (!user) return next(new AppError('User of this token no longer exists', 401));
     if (user.changedPasswordAfter(decoded.iat))
         return next(new AppError('Password was recently changed. Please Login again', 401));
+
+    if (new Date() > new Date(decoded.exp))
+        return next(new AppError('Token Expired, Please Login again', 403));
 
     req.user = user;
     next();

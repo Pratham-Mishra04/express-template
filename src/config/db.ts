@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 import logger from '../utils/logger';
 import { ENV } from './env';
 
-const URL: string = ENV.USE_REMOTE_DB ? ENV.MONGO_URL.replace('<password>', ENV.MONGO_PASSWORD) : ENV.LOCAL_MONGO_URL;
+const URL: string = ENV.USE_REMOTE_DB
+    ? ENV.MONGO_URL.replace('<password>', ENV.MONGO_PASSWORD)
+    : ENV.LOCAL_MONGO_URL;
 
 const connectToDB = () =>
     mongoose
