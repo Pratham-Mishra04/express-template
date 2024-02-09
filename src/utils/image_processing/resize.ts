@@ -12,7 +12,7 @@ export const resizePic = async (picPath: string, toPath: string, d1: number, d2:
 
         await fs.promises.unlink(picPath);
     } catch (err) {
-        logger.error(`Error in Resizing ${picPath}: ${err.message}`);
+        logger.warn(`Error in Resizing ${picPath}: ${err.message}`, 'image_resize', err);
     }
 };
 

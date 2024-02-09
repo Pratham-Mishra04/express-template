@@ -1,12 +1,13 @@
 {
-    "name": "mern-task_backend",
+    "name": "backend_template",
     "version": "1.0.0",
     "description": "",
     "main": "src/index.js",
     "scripts": {
-        "build": "tsc",
         "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-        "lint": "eslint --fix --ext .ts"
+        "lint": "eslint --fix --ext .ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
     },
     "author": "",
     "license": "ISC",
