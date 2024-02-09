@@ -3,14 +3,14 @@ import * as hbs from 'nodemailer-express-handlebars';
 import * as path from 'path';
 import { ENV } from '../config/env';
 
-interface Config {
+interface CONFIG {
     email: string;
     subject: string;
     body: string;
     template: string;
 }
 
-const sendEmail = async (config: Config): Promise<void> => {
+const sendEmail = async (config: CONFIG): Promise<void> => {
     const transporter = nodemailer.createTransport({
         host: ENV.EMAIL_HOST,
         port: Number(ENV.EMAIL_PORT),
